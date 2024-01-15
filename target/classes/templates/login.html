@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>GeoJuego</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+</head>
+<body>
+
+<style>
+    @keyframes rainbow {
+        0% {color: red;}
+        28% {color: yellow;}
+        42% {color: orange;}
+    }
+
+    .navbar-brand {
+        font-size: 60px;
+        font-weight: bold;
+        background: linear-gradient(90deg, red, yellow, orange);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        transition: transform 0.3s ease-in-out; /* Agrega una transición suave al efecto de transformación */
+    }
+
+    .navbar-brand:hover {
+        animation: rainbow 30s linear infinite;
+        transform: translateY(-10px); /* Mueve el texto 10px hacia arriba */
+    }
+
+</style>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid d-flex justify-content-center w-100">
+        <a class="navbar-brand animate__animated animate__bounce" th:href="@{/index}">GeoJuego</a>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div th:if="${param.error}">
+                <div class="alert alert-danger">Invalid Email and Password.</div>
+            </div>
+            <div th:if="${param.logout}">
+                <div class="alert alert-success">You have been logged out.</div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="text-center">Acceso</h3>
+                </div>
+                <div class="card-body">
+                    <form
+                            method="post"
+                            th:action="@{/login}"
+                            class="form-horizontal"
+                            role="form"
+                    >
+                        <div class="mb-3">
+                            <label for="username" class="control-label">Email *</label>
+                            <input type="text"
+                                   id="username"
+                                   name="username"
+                                   class="form-control"
+                                   placeholder="Email"
+                            />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="password" class="control-label">Password *</label>
+                            <input type="password"
+                                   id="password"
+                                   name="password"
+                                   class="form-control"
+                                   placeholder="Password"
+                            />
+                        </div>
+
+                        <div class="mb-3">
+                            <button type="submit" class="btn btn-primary">Login</button>
+                            <span> Not registered?
+                            <a th:href="@{/register}"> Register/SignUp Here</a>
+                        </span>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

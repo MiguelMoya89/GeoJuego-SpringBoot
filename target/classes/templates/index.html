@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>GeoJuego</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+</head>
+<body>
+
+<style>
+    @keyframes rainbow {
+        0% {color: red;}
+        28% {color: yellow;}
+        42% {color: lime;}
+        100% {color: red;}
+    }
+
+    .navbar-brand {
+        font-size: 60px;
+        font-weight: bold;
+        background: linear-gradient(90deg, red, yellow, lime);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        transition: transform 0.3s ease-in-out; /* Agrega una transición suave al efecto de transformación */
+    }
+
+    .navbar-brand:hover {
+        animation: rainbow 30s linear infinite;
+        transform: translateY(-10px); /* Mueve el texto 10px hacia arriba */
+    }
+
+</style>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid d-flex justify-content-center w-100">
+        <a class="navbar-brand animate__animated animate__bounce" th:href="@{/index}">GeoJuego</a>
+    </div>
+</nav>
+
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h2 class="card-title">Bienvenido</h2>
+                    <p class="card-text">Por favor, regístrate o inicia sesión para continuar y asi disfrutar del juego.</p>
+                    <a th:href="@{/register}" class="btn btn-primary">Registrarse</a>
+                    <a th:href="@{/login}" class="btn btn-secondary">Iniciar sesión</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div id="map" style="width: 100%; height: 400px;"></div>
+            <div id="info" style="text-align: center; margin-top: 10px;"></div>
+        </div>
+    </div>
+</div>
+<script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
+<script>
+    // Límites geográficos de Murcia
+    var minLat = 37.7;
+    var maxLat = 38.2;
+    var minLng = -1.5;
+    var maxLng = -1.0;
+
+    // Genera una coordenada aleatoria dentro de los límites de Murcia
+    var lat = Math.random() * (maxLat - minLat) + minLat;
+    var lng = Math.random() * (maxLng - minLng) + minLng;
+
+    var map = L.map('map').setView([lat, lng], 10);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+    L.marker([lat, lng]).addTo(map);
+
+    // Muestra el nombre del lugar y las coordenadas debajo del mapa
+    document.getElementById('info').innerHTML = 'Ubicación: Murcia<br>Coordenadas: ' + lat.toFixed(4) + ', ' + lng.toFixed(4);
+</script>
+</body>
+</html>
+
