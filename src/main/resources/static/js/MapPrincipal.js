@@ -305,3 +305,68 @@
              polyline.bindPopup(popupContent).openPopup();
          }
      }
+
+         // Variable global para almacenar la última polilínea creada
+         let lastCreatedPolyline = null;
+
+         // Modificar el evento pm:create para almacenar la polilínea en la variable global
+         map.on('pm:create', function(e) {
+             let layer = e.layer;
+             let latlngs = layer.getLatLngs();
+             lastCreatedPolyline = {latlngs: latlngs};
+         });
+
+         // Función para guardar la polilínea en un archivo JSON
+         function savePolylineToFile() {
+             if (lastCreatedPolyline) {
+                 let blob = new Blob([JSON.stringify(lastCreatedPolyline)], {type: "application/json;charset=utf-8"});
+                 let filename = 'polyline.json';
+                 saveAs(blob, filename);
+             } else {
+                 alert('No hay ninguna polilínea para guardar.');
+             }
+         }
+
+         // Función para cargar una polilínea desde un archivo JSON
+         function loadPolylineFromFile() {
+             let input = document.createElement('input');
+             input.type = 'file';
+             input.accept = 'application/json';
+             input.onchange = function(event) {
+                 let file = event.target.files[0];
+                 let reader = new FileReader();
+                 reader.onload = function(event) {
+                     let polyline = JSON.parse(event.target.result);
+                     // Dibuja la polilínea en el mapa
+                     L.polyline(polyline.latlngs).addTo(map);
+                 };
+                 reader.readAsText(file);
+             };
+             input.click();
+         }
+
+         // Agregar un botón para guardar la polilínea
+         let saveButton = L.control({position: 'topleft'});
+         saveButton.onAdd = function (map) {
+             let div = L.DomUtil.create('div', 'save-button');
+             div.innerHTML = '<button id="saveButton">Guardar polilínea</button>';
+             return div;
+         };
+         saveButton.addTo(map);
+         document.getElementById('saveButton').addEventListener('click', function(e) {
+             e.stopPropagation();
+             savePolylineToFile();
+         });
+
+         // Agregar un botón para cargar una polilínea
+         let loadButton = L.control({position: 'topleft'});
+         loadButton.onAdd = function (map) {
+             let div = L.DomUtil.create('div', 'load-button');
+             div.innerHTML = '<button id="loadButton">Cargar polilínea</button>';
+             return div;
+         };
+         loadButton.addTo(map);
+         document.getElementById('loadButton').addEventListener('click', function(e) {
+             e.stopPropagation();
+             loadPolylineFromFile();
+         });

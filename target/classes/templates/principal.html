@@ -126,16 +126,16 @@
                     <a class="nav-link active" aria-current="page" th:href="@{/preguntas}">Preguntas</a>
                 </li>
                 <li class="nav-item">
-                    <button class="btn btn-primary" onclick="getMyLocation()">¿Donde estoy?</button>
+                    <button id="locationButton" class="btn btn-primary" onclick="getMyLocation()">¿Donde estoy?</button>
                 </li>
                 <input type="range" id="speed" min="0.1" max="2" step="0.1" value="1">
                 <input type="range" id="volume" min="0" max="1" step="0.01" value="1">
-                <a id="play"><i class="fa-solid fa-play"></i></a>
+                <a id="play" class="animated-button"><i class="fa-solid fa-play"></i></a>
             </ul>
             <form class="d-flex" action="/search" method="get">
                 <input class="form-control me-2" type="search" name="query" placeholder="Search" aria-label="Search">
                 <input class="form-control me-2" type="search" name="postalCode" placeholder="Postal Code" aria-label="Postal Code">
-                <button class="btn btn-outline-success" type="submit">Search</button>
+                <button id="searchButton" class="btn btn-outline-success" type="submit">Search</button>
             </form>
         </div>
     </div>
@@ -156,7 +156,10 @@
     <script src="/js/MapPrincipal.js"></script>
     <script src="/js/busqueda.js"></script>
     <script src="/js/audio.js"></script>
+    <script src="/js/AnimacionShoelace.js"></script>
     <script src="https://kit.fontawesome.com/ae360af17e.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.2/FileSaver.min.js"></script>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.12.0/cdn/components/animation/animation.js"></script>
 
 </body>
 </html>
