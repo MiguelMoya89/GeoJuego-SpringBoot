@@ -6,20 +6,25 @@ document.addEventListener('DOMContentLoaded', function() {
     audio.load();
 
     const button = document.querySelector('#play');
-        button.addEventListener('click', function() {
-            if (audio.paused) {
-                audio.play();
-                button.style.boxShadow = '';  // Elimina el efecto de sombra al botón
-                button.style.color = 'white';  // Cambia el color del botón a blanco
-            } else {
-                audio.pause();
-                button.style.boxShadow = '3px 3px 5px 6px #ccc';  // Añade un efecto de sombra al botón
-                button.style.color = '';  // Restaura el color original del botón
-            }
-        });
+    button.addEventListener('click', function() {
+        if (audio.paused) {
+            audio.play();
+            button.style.boxShadow = '';  // Elimina el efecto de sombra al botón
+            button.style.color = 'white';  // Cambia el color del botón a blanco
+        } else {
+            audio.pause();
+            button.style.boxShadow = '1px 1px 3px 3px #ccc';  // Añade un efecto de sombra al botón
+            button.style.color = '';  // Restaura el color original del botón
+        }
+    });
 
     const volume = document.querySelector('#volume');
     volume.addEventListener('input', function() {
         audio.volume = volume.value;
+    });
+
+    const speed = document.querySelector('#speed');
+    speed.addEventListener('input', function() {
+        audio.playbackRate = speed.value;
     });
 });

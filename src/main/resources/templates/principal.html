@@ -16,10 +16,14 @@
 <style>
 
     body, html, #map {
+        box-sizing: border-box;
         margin: 0;
+        margin-top: 0;
         padding: 0;
-        height: 100%;
-        width: 100%;
+        height: 100vh;
+        width: 100vw;
+        overflow-x: hidden; /* Esto es para evitar el desplazamiento horizontal si hay algún margen o relleno */
+        box-sizing: border-box; /* Esto es para que el ancho y alto incluyan el relleno y el borde */
     }
 
     @keyframes rainbow {
@@ -42,16 +46,62 @@
 
     .navbar {
         background-color: #e3f2fd;
+        margin-bottom: 0;
     }
+
     #volume {
         transform: rotate(-90deg);
         width: 40px; /* Ajusta este valor según tus necesidades */
+        margin-right: 2px; /* Ajusta este valor según tus necesidades */
+        margin-left: 2px; /* Ajusta este valor según tus necesidades */
+    }
+
+    #speed {
+        transform: rotate(-90deg);
+        width: 40px; /* Ajusta este valor según tus necesidades */
+        margin-right: 1px; /* Ajusta este valor según tus necesidades */
+        margin-left: 1px; /* Ajusta este valor según tus necesidades */
+    }
+
+    /* Cambia el color de la barra de desplazamiento de #speed a rojo */
+    #speed::-webkit-slider-runnable-track {
+      background: orange;
+    }
+
+    #speed::-moz-range-track {
+      background: orange;
+    }
+
+    #speed::-ms-track {
+      background: orange;
+    }
+
+    /* Cambia el color de la barra de desplazamiento de #volume a azul */
+    #volume::-webkit-slider-runnable-track {
+      background: green;
+    }
+
+    #volume::-moz-range-track {
+      background: green;
+    }
+
+    #volume::-ms-track {
+      background: green;
+    }
+
+    #play {
+        width: 40px; /* Ajusta este valor según tus necesidades */
+        height: 40px; /* Ajusta este valor según tus necesidades */
+        border-radius: 50%;
+        background-color: #007bff;
+        margin-left: 5px; /* Ajusta este valor según tus necesidades */
     }
 
     #play .fa-solid {
         color: white;
     }
-     #play {
+
+    #play {
         display: flex;
         justify-content: center;
         align-items: center;
@@ -76,8 +126,9 @@
                     <a class="nav-link active" aria-current="page" th:href="@{/preguntas}">Preguntas</a>
                 </li>
                 <li class="nav-item">
-                    <button class="btn btn-primary" onclick="getMyLocation()">Obtener mi ubicación</button>
+                    <button class="btn btn-primary" onclick="getMyLocation()">¿Donde estoy?</button>
                 </li>
+                <input type="range" id="speed" min="0.1" max="2" step="0.1" value="1">
                 <input type="range" id="volume" min="0" max="1" step="0.01" value="1">
                 <a id="play"><i class="fa-solid fa-play"></i></a>
             </ul>

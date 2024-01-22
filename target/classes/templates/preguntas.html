@@ -36,15 +36,60 @@
     .navbar {
         background-color: #e3f2fd;
     }
+
     #volume {
         transform: rotate(-90deg);
         width: 40px; /* Ajusta este valor según tus necesidades */
+        margin-right: 2px; /* Ajusta este valor según tus necesidades */
+        margin-left: 2px; /* Ajusta este valor según tus necesidades */
+    }
+
+    #speed {
+        transform: rotate(-90deg);
+        width: 40px; /* Ajusta este valor según tus necesidades */
+        margin-right: 1px; /* Ajusta este valor según tus necesidades */
+        margin-left: 1px; /* Ajusta este valor según tus necesidades */
+    }
+
+    /* Cambia el color de la barra de desplazamiento de #speed a rojo */
+    #speed::-webkit-slider-runnable-track {
+      background: orange;
+    }
+
+    #speed::-moz-range-track {
+      background: orange;
+    }
+
+    #speed::-ms-track {
+      background: orange;
+    }
+
+    /* Cambia el color de la barra de desplazamiento de #volume a azul */
+    #volume::-webkit-slider-runnable-track {
+      background: green;
+    }
+
+    #volume::-moz-range-track {
+      background: green;
+    }
+
+    #volume::-ms-track {
+      background: green;
+    }
+
+    #play {
+        width: 40px; /* Ajusta este valor según tus necesidades */
+        height: 40px; /* Ajusta este valor según tus necesidades */
+        border-radius: 50%;
+        background-color: #007bff;
+        margin-left: 5px; /* Ajusta este valor según tus necesidades */
     }
 
     #play .fa-solid {
         color: white;
     }
-     #play {
+
+    #play {
         display: flex;
         justify-content: center;
         align-items: center;
@@ -54,6 +99,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
         <a class="navbar-brand animate__animated animate__bounce" th:href="@{/principal}">GeoJuego</a>
+        <input type="range" id="speed" min="0.1" max="2" step="0.1" value="1">
         <input type="range" id="volume" min="0" max="1" step="0.01" value="1">
         <a id="play"><i class="fa-solid fa-play"></i></a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -62,20 +108,30 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             </ul>
-            <form class="d-flex">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>
         </div>
     </div>
 
 </nav>
-<div class="container">
-    <div th:each="entry : ${preguntas}">
-        <h2 th:text="${entry.key}"></h2>
-        <ul th:each="respuesta : ${entry.value}">
-            <li th:text="${respuesta}"></li>
-        </ul>
+
+    <div class="container">
+        <!-- Si hay un mensaje, mostrarlo -->
+        <div th:if="${mensaje}">
+            <div class="alert alert-success" role="alert" th:text="${mensaje}"></div>
+        </div>
+        <!-- Para cada pregunta, mostrar la pregunta y las respuestas disponibles -->
+        <div th:each="entry : ${preguntas}">
+            <h2 th:text="${entry.key}"></h2>
+            <!-- Crear un formulario para cada pregunta -->
+            <form th:action="@{/respuesta}" th:object="${respuesta}" method="post">
+                <!-- Para cada respuesta, crear un botón de opción -->
+                <div th:each="respuesta, iterStat : ${entry.value}">
+                    <input type="radio" th:id="${'respuesta' + iterStat.index}" th:name="respuestaSeleccionada" th:value="${respuesta}" required>
+                    <label th:for="${'respuesta' + iterStat.index}" th:text="${respuesta}"></label><br>
+                </div>
+                <!-- Botón para enviar la respuesta seleccionada -->
+                <button type="submit">Enviar respuesta</button>
+            </form>
+        </div>
     </div>
     <div class="row">
         <h1 class="text-center">  </h1>
@@ -91,6 +147,7 @@
 
     <script src="/js/MapPreguntas.js"></script>
     <script src="/js/audio.js"></script>
+    <script src="/js/busqueda2.js"></script>
     <script src="https://kit.fontawesome.com/ae360af17e.js" crossorigin="anonymous"></script>
 
 </body>

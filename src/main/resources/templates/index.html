@@ -36,9 +36,19 @@
     }
 
     body {
-        background-image: url('static/index1.jpg');
+        background-image: url('/js/img/fondoInicio.jpeg');
         background-repeat: no-repeat;
-        background-size: cover;
+        background-size: inherit;
+        background-repeat: revert;
+    }
+
+    #info {
+        background-color: white;
+        color: black;
+        padding: 10px;
+        border-radius: 5px;
+        width: 500px; /* Ajusta este valor según tus necesidades */
+        margin: auto;
     }
 </style>
 
@@ -88,8 +98,13 @@
     }).addTo(map);
     L.marker([lat, lng]).addTo(map);
 
-    // Muestra el nombre del lugar y las coordenadas debajo del mapa
-    document.getElementById('info').innerHTML = 'Ubicación: Murcia<br>Coordenadas: ' + lat.toFixed(4) + ', ' + lng.toFixed(4);
+    // Obtiene el nombre de la ubicación más específica usando el servicio de geocodificación inversa de Nominatim
+    fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
+        .then(response => response.json())
+        .then(data => {
+            // Muestra el nombre del lugar y las coordenadas debajo del mapa
+            document.getElementById('info').innerHTML = 'Ubicación: ' + data.display_name + '<br>Coordenadas: ' + lat.toFixed(4) + ', ' + lng.toFixed(4);
+        });
 </script>
 </body>
 </html>
