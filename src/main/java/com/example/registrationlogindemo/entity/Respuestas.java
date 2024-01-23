@@ -1,15 +1,11 @@
 package com.example.registrationlogindemo.entity;
 
-import lombok.Getter;
-
-@Getter
 public class Respuestas {
-    // Getters and setters
-    private String pregunta;
     private String respuestaSeleccionada;
 
-    public void setPregunta(String pregunta) {
-        this.pregunta = pregunta;
+    // Getters y setters
+    public String getRespuestaSeleccionada() {
+        return respuestaSeleccionada;
     }
 
     public void setRespuestaSeleccionada(String respuestaSeleccionada) {
