@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet.fullscreen@1.6.0/dist/leaflet.fullscreen.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+
 </head>
 <body>
 
@@ -112,26 +113,15 @@
     </div>
 
 </nav>
-
     <div class="container">
-        <!-- Si hay un mensaje, mostrarlo -->
-        <div th:if="${mensaje}">
-            <div class="alert alert-success" role="alert" th:text="${mensaje}"></div>
-        </div>
-        <!-- Para cada pregunta, mostrar la pregunta y las respuestas disponibles -->
-        <div th:each="entry : ${preguntas}">
-            <h2 th:text="${entry.key}"></h2>
-            <!-- Crear un formulario para cada pregunta -->
-            <form th:action="@{/respuesta}" th:object="${respuesta}" method="post">
-                <!-- Para cada respuesta, crear un botón de opción -->
-                <div th:each="respuesta, iterStat : ${entry.value}">
-                    <input type="radio" th:id="${'respuesta' + iterStat.index}" th:name="respuestaSeleccionada" th:value="${respuesta}" required>
-                    <label th:for="${'respuesta' + iterStat.index}" th:text="${respuesta}"></label><br>
-                </div>
-                <!-- Botón para enviar la respuesta seleccionada -->
-                <button type="submit">Enviar respuesta</button>
-            </form>
-        </div>
+            <!-- Si hay un mensaje, mostrarlo -->
+            <div th:if="${mensaje}">
+                <div class="alert alert-success" role="alert" th:text="${mensaje}"></div>
+            </div>
+          <div th:each="entry : ${preguntas}">
+                <h2 th:text="${entry.key}"></h2>
+                <p>Haz clic en el mapa para responder a la pregunta.</p>
+          </div>
     </div>
     <div class="row">
         <h1 class="text-center">  </h1>
@@ -151,6 +141,7 @@
     <script src="https://kit.fontawesome.com/ae360af17e.js" crossorigin="anonymous"></script>
     <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.12.0/cdn/components/animation/animation.js"></script>
     <script src="/js/AnimacionShoelace.js"></script>
+    <script src="/js/respuestas.js"></script>
 
 
 </body>
