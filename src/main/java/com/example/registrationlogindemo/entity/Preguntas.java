@@ -1,26 +1,29 @@
 package com.example.registrationlogindemo.entity;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
 
 public class Preguntas {
-    private Map<String, List<String>> preguntasYRespuestas;
+    private String pregunta;
+    private List<String> respuestas;
+    private String respuestaCorrecta;
 
-    public Preguntas() {
-        this.preguntasYRespuestas = new HashMap<>();
+
+    public void agregarPreguntaYRespuesta(String pregunta, List<String> respuestas, String respuestaCorrecta) {
+        this.pregunta = pregunta;
+        this.respuestas = respuestas;
+        this.respuestaCorrecta = respuestaCorrecta;
     }
 
-    public void agregarPreguntaYRespuesta(String pregunta, List<String> respuestas) {
-        this.preguntasYRespuestas.put(pregunta, respuestas);
+    public String obtenerPregunta() {
+        return this.pregunta;
     }
 
-    public List<String> obtenerRespuesta(String pregunta) {
-        return this.preguntasYRespuestas.get(pregunta);
+    public List<String> obtenerRespuestas() {
+        return this.respuestas;
     }
 
-    public Map<String, List<String>> obtenerTodasLasPreguntasYRespuestas() {
-        return this.preguntasYRespuestas;
+    public String obtenerRespuestaCorrecta() {
+        return this.respuestaCorrecta;
     }
 }
