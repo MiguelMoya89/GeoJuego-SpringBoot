@@ -122,10 +122,9 @@
         <div class="container">
             <h2 th:text="${pregunta}"></h2>
             <form id="answerForm">
-                <div th:each="respuesta, iterStat : ${respuestas}">
-                    <input type="radio" th:id="'answer' + ${iterStat.index}" th:value="${respuesta}" name="answer" required>
-                    <label th:for="'answer' + ${iterStat.index}" th:text="${respuesta}"></label><br>
-                </div>
+                <select id="answer" name="answer" required>
+                    <option th:each="respuesta, iterStat : ${respuestas}" th:value="${respuesta}" th:text="${respuesta}"></option>
+                </select>
                 <button type="submit">Enviar Respuesta</button>
                 <button type="button" id="changeQuestionButton" style="display: none;">Cambiar Pregunta</button>
             </form>
@@ -133,7 +132,6 @@
             <p id="correctAnswer" th:text="${respuestaCorrecta}" style="display: none;"></p>
             <p id="result"></p>
         </div>
-
     </div>
 
     <script src="/js/MapPreguntas.js"></script>

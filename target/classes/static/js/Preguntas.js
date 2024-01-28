@@ -1,34 +1,27 @@
-        // Crear un mapa
-        var map = L.map('map').setView([51.505, -0.09], 13);
+// Evento para enviar la ubicación del marcador
+document.getElementById('answerForm').addEventListener('submit', function(event) {
+    event.preventDefault();
 
-        // Añadir capa de teselas
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-        }).addTo(map);
+    // Si hay un marcador, obtén su ubicación
+    if (marker) {
+        var location = marker.getLatLng();
 
-        // Variable para almacenar el marcador
-        var marker;
-
-        // Evento para agregar un marcador al hacer clic
-        map.on('click', function(e) {
-            // Si ya hay un marcador, quítalo
-            if (marker) {
-                map.removeLayer(marker);
-            }
-
-            // Agrega un nuevo marcador
-            marker = L.marker(e.latlng).addTo(map);
+        // Realiza una solicitud POST al servidor con la ubicación del marcador
+        fetch('/api/enviarUbicacion', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ latitud: location.lat, longitud: location.lng }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Respuesta del servidor:', data);
+            // Aquí puedes manejar la respuesta del servidor si es necesario
+        })
+        .catch(error => {
+            console.error('Error al enviar la ubicación:', error);
         });
+    }
+});
 
-        // Evento para enviar la ubicación del marcador
-        document.getElementById('answerForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-
-            // Si hay un marcador, obtén su ubicación
-            if (marker) {
-                var location = marker.getLatLng();
-
-                // Aquí puedes enviar 'location' al servidor para procesarlo
-                console.log(location);
-            }
-        });
