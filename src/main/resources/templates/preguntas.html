@@ -96,6 +96,45 @@
     }
 </style>
 
+<style>
+    @keyframes mover {
+        0% { left: 0; }
+        50% { left: 50%; }
+        100% { left: 0; }
+    }
+
+    @keyframes moverRapido {
+        0% { left: 0; }
+        50% { left: 75%; }
+        100% { left: 0; }
+    }
+
+    @keyframes cambiarColor {
+        0% { background-color: #007bff; }
+        50% { background-color: #dc3545; }
+        100% { background-color: #007bff; }
+    }
+
+    @keyframes reboteGirar {
+        0%, 100% { transform: translateY(0) rotate(0deg); }
+        50% { transform: translateY(-50px) rotate(360deg); } /* Ajusta este valor según tus necesidades */
+    }
+
+    #play {
+        position: relative;
+        animation: mover 30s linear infinite, cambiarColor 5s linear infinite, reboteGirar 5s ease-in-out infinite;
+    }
+
+    #play:hover {
+        animation: moverRapido 45s linear infinite, cambiarColor 2s linear infinite, reboteGirar 2s ease-in-out infinite;
+    }
+</style>
+
+
+
+
+
+
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
         <a class="navbar-brand animate__animated animate__bounce" th:href="@{/principal}">GeoJuego</a>
@@ -110,37 +149,24 @@
             </ul>
         </div>
     </div>
+
 </nav>
+
     <div class="row">
-        <h1 class="text-center"></h1>
+        <h1 class="text-center">  </h1>
     </div>
     <div id="map" style="width: 100%; height: 400px;"></div>
     <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/@geoman-io/leaflet-geoman-free@latest/dist/leaflet-geoman.css" />
     <script src="https://unpkg.com/@geoman-io/leaflet-geoman-free@latest/dist/leaflet-geoman.min.js"></script>
 
-        <div class="container">
-            <h2 th:text="${pregunta}"></h2>
-            <form id="answerForm">
-                <select id="answer" name="answer" required>
-                    <option th:each="respuesta, iterStat : ${respuestas}" th:value="${respuesta}" th:text="${respuesta}"></option>
-                </select>
-                <button type="submit">Enviar Respuesta</button>
-                <button type="button" id="changeQuestionButton" style="display: none;">Cambiar Pregunta</button>
-            </form>
-            <h3>Respuesta Correcta:</h3>
-            <p id="correctAnswer" th:text="${respuestaCorrecta}" style="display: none;"></p>
-            <p id="result"></p>
-        </div>
-    </div>
+
 
     <script src="/js/MapPreguntas.js"></script>
     <script src="/js/audio.js"></script>
-    <script src="/js/busqueda2.js"></script>
     <script src="https://kit.fontawesome.com/ae360af17e.js" crossorigin="anonymous"></script>
     <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.12.0/cdn/components/animation/animation.js"></script>
     <script src="/js/AnimacionShoelace.js"></script>
-    <script src="/js/Preguntas.js"></script>
 
 
 </body>

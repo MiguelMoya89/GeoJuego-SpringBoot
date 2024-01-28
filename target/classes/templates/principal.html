@@ -24,6 +24,10 @@
         width: 100vw;
         overflow-x: hidden; /* Esto es para evitar el desplazamiento horizontal si hay algún margen o relleno */
         box-sizing: border-box; /* Esto es para que el ancho y alto incluyan el relleno y el borde */
+        background-image: url('/js/img/fondoGuardados.jpeg');
+        background-repeat: no-repeat;
+        background-size: inherit;
+        background-repeat: revert;
     }
 
     @keyframes rainbow {
@@ -108,6 +112,41 @@
     }
 </style>
 
+<style>
+    @keyframes mover {
+        0% { left: 0; }
+        50% { left: 40%; }
+        100% { left: 0; }
+    }
+
+    @keyframes moverRapido {
+        0% { left: 0; }
+        50% { left: 60%; }
+        100% { left: 0; }
+    }
+
+    @keyframes cambiarColor {
+        0% { background-color: #007bff; }
+        50% { background-color: #dc3545; }
+        100% { background-color: #007bff; }
+    }
+
+    @keyframes reboteGirar {
+        0%, 100% { transform: translateY(0) rotate(0deg); }
+        50% { transform: translateY(-30px) rotate(360deg); } /* Ajusta este valor según tus necesidades */
+    }
+
+    #play {
+        position: relative;
+        animation: mover 20s linear infinite, cambiarColor 3s linear infinite, reboteGirar 4s ease-in-out infinite;
+    }
+
+    #play:hover {
+        animation: moverRapido 25s linear infinite, cambiarColor 1s linear infinite, reboteGirar 2s ease-in-out infinite;
+    }
+</style>
+
+
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
         <a class="navbar-brand animate__animated animate__bounce" th:href="@{/principal}">GeoJuego</a>
@@ -159,8 +198,7 @@
     <script src="/js/AnimacionShoelace.js"></script>
     <script src="https://kit.fontawesome.com/ae360af17e.js" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.2/FileSaver.min.js"></script>
-    <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.12.0/cdn/components/animation/animation.js"></script>c
-    <script src="/js/polylineasDB.js"></script>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.12.0/cdn/components/animation/animation.js"></script>
 
 </body>
 </html>
