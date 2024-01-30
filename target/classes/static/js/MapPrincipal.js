@@ -139,16 +139,29 @@
              polylines.push(polyline);
              localStorage.setItem('polylines', JSON.stringify(polylines));
 
-             // Verificar si la polilínea se ha guardado correctamente
-             let savedPolylinesJson = localStorage.getItem('polylines');
-             if (savedPolylinesJson) {
-                 let savedPolylines = JSON.parse(savedPolylinesJson);
-                 if (savedPolylines && savedPolylines.some(savedPolyline => JSON.stringify(savedPolyline) === JSON.stringify(polyline))) {
-                     // Mostrar indicador de éxito
-                     alert('La polilínea se ha guardado correctamente.');
-                 }
-             }
-         }
+             const data = JSON.stringify({ polylines: polylines });
+             const url = 'http://localhost:9000/guardarPoly';
+
+             // Enviar los datos al servidor
+             fetch(url, {
+                 method: 'POST',
+                 headers: {
+                     'Content-Type': 'application/json'
+                 },
+                 body: data
+             }).then(response => response.json())
+                 .then(data => {
+                     // Verificar si la polilínea se ha guardado correctamente
+                     let savedPolylinesJson = localStorage.getItem('polylines');
+                     if (savedPolylinesJson) {
+                         let savedPolylines = JSON.parse(savedPolylinesJson);
+                         if (savedPolylines && savedPolylines.some(savedPolyline => JSON.stringify(savedPolyline) === JSON.stringify(polyline))) {
+                             // Mostrar indicador de éxito
+                             alert('La polilínea se ha guardado correctamente.');
+                         }
+                     }
+                 })
+                 .catch(error => console.error('Error:', error));
 
          // Limpiar el mapa después de guardar
          // map.eachLayer(function(layer) {
@@ -157,7 +170,8 @@
          // }
          // });
 
-     });
+            }
+        });
 
      //añade un boton para limpiar todos los elementos del mapa
      let clearButton = L.control({position: 'topleft'});

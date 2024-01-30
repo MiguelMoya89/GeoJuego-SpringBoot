@@ -66,4 +66,20 @@
             var container = document.getElementById('polylinesContainer');
             container.appendChild(polylineDiv);
         });
+
+        // Enviar los datos al servidor
+        const data = JSON.stringify({ polylines: polylines });
+        const url = 'http://localhost:9000/guardarPoly';
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: data
+        }).then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+            })
+            .catch(error => console.error('Error:', error));
     }

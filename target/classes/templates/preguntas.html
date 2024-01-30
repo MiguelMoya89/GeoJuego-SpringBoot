@@ -131,10 +131,6 @@
 </style>
 
 
-
-
-
-
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
         <a class="navbar-brand animate__animated animate__bounce" th:href="@{/principal}">GeoJuego</a>
@@ -151,11 +147,24 @@
     </div>
 
 </nav>
-
-    <div class="row">
-        <h1 class="text-center">  </h1>
-    </div>
     <div id="map" style="width: 100%; height: 400px;"></div>
+
+    <div class="container">
+        <h2 th:text="${pregunta}"></h2>
+        <form id="answerForm">
+            <div th:each="respuesta, iterStat : ${respuestas}">
+                <input type="radio" th:id="'answer' + ${iterStat.index}" th:value="${respuesta}" name="answer" required>
+                <label th:for="'answer' + ${iterStat.index}" th:text="${respuesta}"></label><br>
+            </div>
+            <button type="submit">Enviar Respuesta</button>
+            <button type="button" id="changeQuestionButton" style="display: none;">Cambiar Pregunta</button>
+        </form>
+        <h3>Respuesta Correcta:</h3>
+        <p id="correctAnswer" th:text="${respuestaCorrecta}"></p>
+        <p id="result"></p>
+    </div>
+
+
     <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/@geoman-io/leaflet-geoman-free@latest/dist/leaflet-geoman.css" />
     <script src="https://unpkg.com/@geoman-io/leaflet-geoman-free@latest/dist/leaflet-geoman.min.js"></script>
@@ -167,6 +176,7 @@
     <script src="https://kit.fontawesome.com/ae360af17e.js" crossorigin="anonymous"></script>
     <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.12.0/cdn/components/animation/animation.js"></script>
     <script src="/js/AnimacionShoelace.js"></script>
+    <script src="/js/preguntas.js"></script>
 
 
 </body>
