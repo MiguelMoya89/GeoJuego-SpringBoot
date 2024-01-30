@@ -12,6 +12,7 @@ import java.util.Random;
 
 @Controller
 public class PreguntasController {
+    
 
     @GetMapping("/preguntas")
     public String preguntas(Model model){

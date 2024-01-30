@@ -7,15 +7,18 @@
     // Añadimos la funcionalidad de dibujar una polilínea y calcular su longitud
     map.on('pm:create', function(e) {
         let layer = e.layer;
-        let latlngs = layer.getLatLngs();
-        let distance = 0;
 
-        for (let i = 0; i < latlngs.length - 1; i++) {
-            distance += latlngs[i].distanceTo(latlngs[i + 1]);
+        if (layer instanceof L.Polyline) {
+            let latlngs = layer.getLatLngs();
+            let distance = 0;
+
+            for (let i = 0; i < latlngs.length - 1; i++) {
+                distance += latlngs[i].distanceTo(latlngs[i + 1]);
+            }
+
+            let popupContent = 'Distancia: ' + (distance / 1000).toFixed(2) + ' km';
+            layer.bindPopup(popupContent).openPopup();
         }
-
-        let popupContent = 'Distancia: ' + (distance / 1000).toFixed(2) + ' km';
-        layer.bindPopup(popupContent).openPopup();
     });
 
     // Habilita leaflet-geoman en el mapa con solo las opciones necesarias habilitadas.
@@ -63,9 +66,6 @@
                 // Actualizamos las variables expandLat y expandLng solo cuando se establece un nuevo marcador
                 expandLat = lat;
                 expandLng = lng;
-
-                // Muestra el nombre del lugar y las coordenadas debajo del mapa
-                document.getElementById('info').innerHTML = 'Ubicación: ' + placeName + '<br>Coordenadas: ' + lat.toFixed(4) + ', ' + lng.toFixed(4);
             })
             .catch(error => console.error('Error:', error));
     }

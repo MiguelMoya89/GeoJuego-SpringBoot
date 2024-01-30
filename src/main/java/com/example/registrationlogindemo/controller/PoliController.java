@@ -18,19 +18,14 @@ public class PoliController {
     @Autowired
     PoliServicio poliServicio;
 
-    @PostMapping("/guardarPoli")
-    public String guardarPoli(@RequestBody String jsonPoli, Authentication authentication){
+    @PostMapping("/guardarPoly")
+    public String guardarPoly(@RequestBody String jsonPoli, Authentication authentication){
         PoliJson poliJson = new PoliJson();
         poliJson.setUser(userService.findByEmail(authentication.getName()));
         poliJson.setFecha(LocalDate.now());
         poliJson.setPoliJson(jsonPoli);
         poliServicio.save(poliJson);
         return "redirect:/principal";
-    }
-
-    @GetMapping("/poli")
-    public String poli(){
-        return "poli";
     }
 
 

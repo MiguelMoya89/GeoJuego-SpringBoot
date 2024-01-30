@@ -83,9 +83,6 @@
                      // Reactivamos el evento de doble clic en el mapa
                      map.doubleClickZoom.enable();
                  });
-
-                 // Muestra el nombre del lugar y las coordenadas debajo del mapa
-                 document.getElementById('info').innerHTML = 'Ubicación: ' + placeName + '<br>Coordenadas: ' + lat.toFixed(4) + ', ' + lng.toFixed(4);
              })
              .catch(error => console.error('Error:', error));
      }
@@ -127,6 +124,7 @@
          if (latlngs.length > 1) {
              let polylines = [];
              let polylinesJson = localStorage.getItem('polylines');
+
              if (polylinesJson) {
                  polylines = JSON.parse(polylinesJson);
              }
@@ -162,14 +160,6 @@
                      }
                  })
                  .catch(error => console.error('Error:', error));
-
-         // Limpiar el mapa después de guardar
-         // map.eachLayer(function(layer) {
-         // if (layer instanceof L.Rectangle || layer instanceof L.Circle || layer instanceof L.Polygon || layer instanceof L.Polyline
-         //  map.removeLayer(layer);
-         // }
-         // });
-
             }
         });
 
@@ -292,43 +282,43 @@
 
 
      // Recuperar el índice de la polilínea seleccionada del LocalStorage
-     let selectedPolylineIndex = localStorage.getItem('selectedPolylineIndex');
-     if (selectedPolylineIndex !== null) {
-         // Recuperar las polilíneas del LocalStorage
-         let polylinesJson = localStorage.getItem('polylines');
-         if (polylinesJson) {
-             let polylines = JSON.parse(polylinesJson);
+          let selectedPolylineIndex = localStorage.getItem('selectedPolylineIndex');
+          if (selectedPolylineIndex !== null) {
+              // Recuperar las polilíneas del LocalStorage
+              let polylinesJson = localStorage.getItem('polylines');
+              if (polylinesJson) {
+                  let polylines = JSON.parse(polylinesJson);
 
-             // Recuperar la polilínea seleccionada
-             let selectedPolyline = polylines[selectedPolylineIndex];
+                  // Recuperar la polilínea seleccionada
+                  let selectedPolyline = polylines[selectedPolylineIndex];
 
-             // Dibujar la polilínea seleccionada en el mapa
-             let latlngs = selectedPolyline.latlngs.map(function(point) {
-                 return [point.lat, point.lng];
-             });
-             let polyline = L.polyline(latlngs).addTo(map);
+                  // Dibujar la polilínea seleccionada en el mapa
+                  let latlngs = selectedPolyline.latlngs.map(function(point) {
+                      return [point.lat, point.lng];
+                  });
+                  let polyline = L.polyline(latlngs).addTo(map);
 
-             // Calcular la distancia total de la polilínea
-             let distance = 0;
-             for (let i = 0; i < latlngs.length - 1; i++) {
-                 distance += map.distance(latlngs[i], latlngs[i + 1]);
-             }
+                  // Calcular la distancia total de la polilínea
+                  let distance = 0;
+                  for (let i = 0; i < latlngs.length - 1; i++) {
+                      distance += map.distance(latlngs[i], latlngs[i + 1]);
+                  }
 
-             // Mostrar la distancia total en un popup en la polilínea
-             let popupContent = 'Distancia total: ' + (distance / 1000).toFixed(2) + ' km';
-             polyline.bindPopup(popupContent).openPopup();
-         }
-     }
+                  // Mostrar la distancia total en un popup en la polilínea
+                  let popupContent = 'Distancia total: ' + (distance / 1000).toFixed(2) + ' km';
+                  polyline.bindPopup(popupContent).openPopup();
+              }
+          }
 
-         // Variable global para almacenar la última polilínea creada
-         let lastCreatedPolyline = null;
+              // Variable global para almacenar la última polilínea creada
+              let lastCreatedPolyline = null;
 
-         // Modificar el evento pm:create para almacenar la polilínea en la variable global
-         map.on('pm:create', function(e) {
-             let layer = e.layer;
-             let latlngs = layer.getLatLngs();
-             lastCreatedPolyline = {latlngs: latlngs};
-         });
+              // Modificar el evento pm:create para almacenar la polilínea en la variable global
+              map.on('pm:create', function(e) {
+                  let layer = e.layer;
+                  let latlngs = layer.getLatLngs();
+                  lastCreatedPolyline = {latlngs: latlngs};
+              });
 
          // Función para guardar la polilínea en un archivo JSON
          function savePolylineToFile() {

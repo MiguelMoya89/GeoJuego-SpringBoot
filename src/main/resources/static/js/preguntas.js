@@ -19,7 +19,12 @@
 
         // Solicita una nueva pregunta al servidor
         fetch('/preguntas')
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
             .then(data => {
                 // Actualiza el HTML con la nueva pregunta
                 document.getElementById('question').textContent = data.pregunta;

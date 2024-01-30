@@ -44,6 +44,7 @@ public class SpringSecurity {
                                 .requestMatchers("/principal").hasRole("USER")
                                 .requestMatchers("/guardados").hasRole("USER")
                                 .requestMatchers("/preguntas").hasRole("USER")
+                                .requestMatchers("/guardarPoly").permitAll() // Permitir todas las solicitudes a /guardarPoly
                                 .requestMatchers("/error").permitAll()
                                 .requestMatchers("/css/**", "/static/**", "/js/**", "**/favicon.ico").permitAll()
                                 .requestMatchers("/users").hasRole("USER")

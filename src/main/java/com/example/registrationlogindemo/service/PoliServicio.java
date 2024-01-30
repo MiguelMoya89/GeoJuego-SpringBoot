@@ -21,7 +21,7 @@ public class PoliServicio {
         return poliRepository.findById(id);
     }
 
-    public PoliJson save(PoliJson poliJson) {
-        return poliRepository.save(poliJson);
+    public void save(PoliJson poliJson) {
+        poliRepository.save(poliJson);
     }
 }
