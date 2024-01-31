@@ -1,8 +1,14 @@
     // Script para el mapa en la página principal del juego en JavaScript
     let map = L.map('map', {
         minZoom: 2,
-        maxZoom: 18
+        maxZoom: 18,
+        maxBounds: [
+            [-90, -180],
+            [90, 180]
+        ]
     }).setView([37.9922, -1.1307], 4);
+
+    let correctAnswerCount = 0;
 
     // Añadimos la funcionalidad de dibujar una polilínea y calcular su longitud
     map.on('pm:create', function(e) {
@@ -97,3 +103,134 @@
         e.stopPropagation();
         clearMap();
     });
+
+    function checkAnswer(answer) {
+        // Comprueba si la respuesta del usuario es correcta
+        const ubicacionElement = document.getElementById('ubicacion');
+        const isCorrect = ubicacionElement ? answer === ubicacionElement.value : false;
+        if (isCorrect) {
+            alert('¡Respuesta correcta!');
+        } else {
+            alert('Respuesta incorrecta.');
+        }
+        return isCorrect;
+    }
+
+    document.getElementById('answerForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        // Obtiene la respuesta del usuario
+        const answer = document.getElementById('answer').value;
+
+        // Comprueba si la respuesta es correcta
+        const isCorrect = checkAnswer(answer);
+
+        // Actualiza el contador de respuestas correctas
+        if (isCorrect) {
+            correctAnswerCount++;
+            alert('Respuesta correcta! Llevas ' + correctAnswerCount + ' respuestas correctas.');
+        } else {
+            alert('Respuesta incorrecta. Inténtalo de nuevo.');
+        }
+
+        // Genera una nueva pregunta
+        getNewQuestion();
+    });
+
+    function getNewQuestion() {
+        // Elige una ubicación aleatoria del conjunto de ubicaciones en tierra
+        const indice = Math.floor(Math.random() * ubicacionesEnTierra.length);
+        const { latitud, longitud } = ubicacionesEnTierra[indice];
+
+        // Actualiza la ubicación en el mapa
+        map.setView([latitud, longitud], 4);
+        if (marker) {
+            map.removeLayer(marker);
+        }
+        marker = L.marker([latitud, longitud]).addTo(map);
+    }
+
+    function getNewQuestion() {
+        // Genera una ubicación aleatoria
+        const { latitud, longitud } = generarUbicacionAleatoria();
+
+        // Actualiza la ubicación en el mapa
+        map.setView([latitud, longitud], 4);
+        if (marker) {
+            map.removeLayer(marker);
+        }
+        marker = L.marker([latitud, longitud]).addTo(map);
+    }
+
+    const ubicacionesEnTierra = [
+        { latitud: 37.7749, longitud: -122.4194 }, // San Francisco, USA
+        { latitud: 51.5074, longitud: -0.1278 }, // Londres, Reino Unido
+        { latitud: 35.6895, longitud: 139.6917 }, // Tokio, Japón
+        // Agrega más ubicaciones aquí...
+        { latitud: 40.4168, longitud: -3.7038 }, // Madrid, España
+        { latitud: 48.8566, longitud: 2.3522 }, // París, Francia
+        { latitud: 52.5200, longitud: 13.4050 }, // Berlín, Alemania
+        { latitud: 55.7558, longitud: 37.6173 }, // Moscú, Rusia
+        { latitud: 41.9028, longitud: 12.4964 }, // Roma, Italia
+        { latitud: 52.3702, longitud: 4.8952 }, // Ámsterdam, Países Bajos
+        { latitud: 59.3293, longitud: 18.0686 }, // Estocolmo, Suecia
+        { latitud: 59.9139, longitud: 10.7522 }, // Oslo, Noruega
+        { latitud: 55.6761, longitud: 12.5683 }, // Copenhague, Dinamarca
+        { latitud: 52.2297, longitud: 21.0122 }, // Varsovia, Polonia
+        { latitud: 50.0755, longitud: 14.4378 }, // Praga, República Checa
+        { latitud: 47.4979, longitud: 19.0402 }, // Budapest, Hungría
+        { latitud: 48.2082, longitud: 16.3738 }, // Viena, Austria
+        { latitud: 46.0569, longitud: 14.5058 }, // Liubliana, Eslovenia
+        { latitud: 45.8150, longitud: 15.9819 }, // Zagreb, Croacia
+        { latitud: 43.8563, longitud: 18.4131 }, // Sarajevo, Bosnia y Herzegovina
+        { latitud: 42.6977, longitud: 23.3219 }, // Sofía, Bulgaria
+        { latitud: 41.3275, longitud: 19.8187 }, // Tirana, Albania
+        { latitud: 42.6629, longitud: 21.1655 }, // Pristina, Kosovo
+        { latitud: 42.4304, longitud: 19.2594 }, // Podgorica, Montenegro
+        { latitud: 41.9973, longitud: 21.4280 }, // Skopie, Macedonia del Norte
+        { latitud: 47.0105, longitud: 28.8638 }, // Chisináu, Moldavia
+        { latitud: 47.1625, longitud: 27.5833 }, // Iasi, Rumanía
+        { latitud: 44.4268, longitud: 26.1025 }, // Bucarest, Rumanía
+        { latitud: 42.6977, longitud: 23.3219 }, // Sofía, Bulgaria
+        { latitud: 45.8150, longitud: 15.9819 }, // Zagreb, Croacia
+        { latitud: 43.8563, longitud: 18.4131 }, // Sarajevo, Bosnia y Herzegovina
+        { latitud: 42.6977, longitud: 23.3219 }, // Sofía, Bulgaria
+        { latitud: 41.3275, longitud: 19.8187 }, // Tirana, Albania
+        { latitud: 42.6629, longitud: 21.1655 }, // Pristina, Kosovo
+        { latitud: 42.4304, longitud: 19.2594 }, // Podgorica, Montenegro
+        { latitud: 41.9973, longitud: 21.4280 }, // Skopie, Macedonia del Norte
+        { latitud: 47.0105, longitud: 28.8638 }, // Chisináu, Moldavia
+        { latitud: 47.1625, longitud: 27.5833 }, // Iasi, Rumanía
+        { latitud: 44.4268, longitud: 26.1025 }, // Bucarest, Rumanía
+        { latitud: 42.6977, longitud: 23.3219 }, // Sofía, Bulgaria
+        { latitud: 45.8150, longitud: 15.9819 }, // Zagreb, Croacia
+        { latitud: 43.8563, longitud: 18.4131 }, // Sarajevo, Bosnia y Herzegovina
+        { latitud: 42.6977, longitud: 23.3219 }, // Sofía, Bulgaria
+        { latitud: 41.3275, longitud: 19.8187 }, // Tirana, Albania
+        { latitud: 42.6629, longitud: 21.1655 }, // Pristina, Kosovo
+        { latitud: 42.4304, longitud: 19.2594 }, // Podgorica, Montenegro
+        { latitud: 41.9973, longitud: 21.4280 }, // Skopie, Macedonia del Norte
+        { latitud: 47.0105, longitud: 28.8638 }, // Chisináu, Moldavia
+        { latitud: 47.1625, longitud: 27.5833 }, // Iasi, Rumanía
+        { latitud: 44.4268, longitud: 26.1025 }, // Bucarest, Rumanía
+        { latitud: 42.6977, longitud: 23.3219 }, // Sofía, Bulgaria
+        { latitud: 45.8150, longitud: 15.9819 }, // Zagreb, Croacia
+        { latitud: 43.8563, longitud: 18.4131 }, // Sarajevo, Bosnia y Herzegovina
+        { latitud: 42.6977, longitud: 23.3219 }, // Sofía, Bulgaria
+        { latitud: 41.3275, longitud: 19.8187 }, // Tirana, Albania
+        { latitud: 42.6629, longitud: 21.1655 }, // Pristina, Kosovo
+        { latitud: 42.4304, longitud: 19.2594 }, // Podgorica, Montenegro
+        { latitud: 41.9973, longitud: 21.4280 }, // Skopie, Macedonia del Norte
+        { latitud: 47.0105, longitud: 28.8638 }, // Chisináu, Moldavia
+        { latitud: 47.1625, longitud: 27.5833 }, // Iasi, Rumanía
+        { latitud: 44.4268, longitud: 26.1025 }, // Bucarest, Rumanía
+    ];
+
+    function generarUbicacionAleatoria() {
+        // Elige una ubicación aleatoria del conjunto de ubicaciones en tierra
+        const indice = Math.floor(Math.random() * ubicacionesEnTierra.length);
+        return ubicacionesEnTierra[indice];
+    }
+
+    // Genera la primera pregunta cuando se carga la página
+    window.onload = getNewQuestion;

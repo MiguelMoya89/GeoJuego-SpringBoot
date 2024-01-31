@@ -146,23 +146,18 @@
     </div>
 
 </nav>
+<table>
+<div class="container">
+    <h2>¿Dónde estoy ubicado?</h2>
     <div id="map" style="width: 100%; height: 400px;"></div>
-
-    <div class="container">
-        <h2 th:text="${pregunta}"></h2>
-        <form id="answerForm">
-            <div th:each="respuesta, iterStat : ${respuestas}">
-                <input type="radio" th:id="'answer' + ${iterStat.index}" th:value="${respuesta}" name="answer" required>
-                <label th:for="'answer' + ${iterStat.index}" th:text="${respuesta}"></label><br>
-            </div>
-            <button type="submit">Enviar Respuesta</button>
-            <button type="button" id="changeQuestionButton" style="display: none;">Cambiar Pregunta</button>
-        </form>
-        <h3>Respuesta Correcta:</h3>
-        <p id="correctAnswer" th:text="${respuestaCorrecta}"></p>
-        <p id="result"></p>
-    </div>
-
+    <form id="answerForm">
+        <label for="answer">Tu respuesta:</label>
+        <input type="text" id="answer" name="answer" required>
+        <button type="submit">Enviar Respuesta</button>
+    </form>
+    <div id="answerResult"></div>
+</div>
+</table>
 
     <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/@geoman-io/leaflet-geoman-free@latest/dist/leaflet-geoman.css" />
