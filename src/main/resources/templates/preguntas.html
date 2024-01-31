@@ -14,6 +14,21 @@
 <body>
 
 <style>
+    body, html, #map {
+        box-sizing: border-box;
+        margin: 0;
+        margin-top: 0;
+        padding: 0;
+        height: 100vh;
+        width: 100vw;
+        overflow-x: hidden; /* Esto es para evitar el desplazamiento horizontal si hay algún margen o relleno */
+        box-sizing: border-box; /* Esto es para que el ancho y alto incluyan el relleno y el borde */
+        background-image: url('/js/img/fondoPreguntas.jpeg');
+        background-repeat: no-repeat;
+        background-size: inherit;
+        background-repeat: revert;
+    }
+
     @keyframes rainbow {
         100% {color: white;}
     }
@@ -27,9 +42,46 @@
         transition: transform 0.3s ease-in-out; /* Agrega una transición suave al efecto de transformación */
     }
 
+    h2.animate__animated.animate__bounce {
+        font-size: 40px;
+        font-weight: bold;
+        transition: transform 0.10s ease-in-out;
+        color: black;
+    }
+
+    h2.animate__animated.animate__bounce:hover {
+        animation: rainbow 30s linear infinite;
+        transform: translateY(-10px);
+    }
+
+    #correctAnswerCount {
+    color: black;
+    transition: transform 0.10s ease-in-out;
+    font-size: 40px;
+    font-weight: bold;
+    margin-top: 5px;
+    }
+
+    #correctAnswerCount:hover {
+    animation: rainbow 50s linear infinite;
+    transform: translateY(-10px);
+    }
+
+
     .navbar-brand:hover {
         animation: rainbow 30s linear infinite;
         transform: translateY(-10px); /* Mueve el texto 10px hacia arriba */
+    }
+
+    #answerForm {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    h2 {
+        text-align: center;
     }
 
     .navbar {
@@ -147,15 +199,15 @@
 
 </nav>
 
-    <div class="container">
-        <h2>¿Dónde estoy ubicado?</h2>
-        <div id="map" style="width: 100%; height: 400px;"></div>
-        <form id="answerForm">
-            <label for="answer">Tu respuesta:</label>
-            <input type="text" id="answer" name="answer" required>
-            <button type="submit">Enviar Respuesta</button>
-        </form>
-    </div>
+        <div class="container" style="border: 3px solid black; background-color: white; padding: 20px;">
+            <h2 class=" animate__animated animate__bounce">¿Dónde estoy?</h2>
+            <div id="map" style="width: 100%; height: 400px;"></div>
+            <form id="answerForm">
+                <label for="answer">Tu respuesta:</label>
+                <input type="text" id="answer" name="answer" required>
+                <button type="submit">Enviar</button>
+                <span id="correctAnswerCount" class="animate__animated animate__bounce">0</span>            </form>
+        </div>
 
     <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/@geoman-io/leaflet-geoman-free@latest/dist/leaflet-geoman.css" />
