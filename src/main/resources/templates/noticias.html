@@ -209,7 +209,7 @@
                     <h5 class="card-title" th:text="${p.titulo}"></h5>
                     <img th:src="${p.imagen}" class="img-fluid img-size d-block mx-auto rounded mb-3" style="width: 100%; height: 250px;">
                     <p class="card-text" th:text="${p.nacionalidad}"></p>
-                    <p class="card-text" th:text="${p.fechaEstreno}"></p>
+                    <p class="card-text" th:text="${p.fechaSubida}"></p>
                     <a th:href="@{/pelicula/{id}(id=${p.id})}" class="btn btn-primary mt-auto">Ver más</a>
                 </div>
             </div>

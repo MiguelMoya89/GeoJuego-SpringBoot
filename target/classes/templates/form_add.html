@@ -1,23 +1,210 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Añadir película</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <title>GeoJuego</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
 </head>
 <body>
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand ms-lg-5" href="/principal">El peliculón</a>
-    <a class="nav-link ms-3 fs-5" href="/principal">Inicio</a>
-    <a class="nav-link ms-3 fs-5" href="/crud">Crud</a>
+
+<style>
+    body, html, #map {
+        box-sizing: border-box;
+        margin: 0;
+        margin-top: 0;
+        padding: 0;
+        height: 100vh;
+        width: 100vw;
+        overflow-x: hidden; /* Esto es para evitar el desplazamiento horizontal si hay algún margen o relleno */
+        box-sizing: border-box; /* Esto es para que el ancho y alto incluyan el relleno y el borde */
+        background-image: url('/js/img/fondoPreguntas.jpeg');
+        background-repeat: no-repeat;
+        background-size: inherit;
+        background-repeat: revert;
+    }
+
+    @keyframes rainbow {
+        100% {color: white;}
+    }
+
+    .navbar-brand {
+        font-size: 20px;
+        font-weight: bold;
+        background: linear-gradient(white, white, white);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        transition: transform 0.3s ease-in-out; /* Agrega una transición suave al efecto de transformación */
+    }
+
+    h2.animate__animated.animate__bounce {
+        font-size: 40px;
+        font-weight: bold;
+        transition: transform 0.10s ease-in-out;
+        color: black;
+    }
+
+    h2.animate__animated.animate__bounce:hover {
+        animation: rainbow 30s linear infinite;
+        transform: translateY(-10px);
+    }
+
+    #correctAnswerCount {
+    color: black;
+    transition: transform 0.10s ease-in-out;
+    font-size: 40px;
+    font-weight: bold;
+    margin-top: 5px;
+    }
+
+    #correctAnswerCount:hover {
+    animation: rainbow 50s linear infinite;
+    transform: translateY(-10px);
+    }
+
+
+    .navbar-brand:hover {
+        animation: rainbow 30s linear infinite;
+        transform: translateY(-10px); /* Mueve el texto 10px hacia arriba */
+    }
+
+    #answerForm {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    h2 {
+        text-align: center;
+    }
+
+    .navbar {
+        background-color: #e3f2fd;
+    }
+
+    #volume {
+        transform: rotate(-90deg);
+        width: 40px; /* Ajusta este valor según tus necesidades */
+        margin-right: 2px; /* Ajusta este valor según tus necesidades */
+        margin-left: 2px; /* Ajusta este valor según tus necesidades */
+    }
+
+    #speed {
+        transform: rotate(-90deg);
+        width: 40px; /* Ajusta este valor según tus necesidades */
+        margin-right: 1px; /* Ajusta este valor según tus necesidades */
+        margin-left: 1px; /* Ajusta este valor según tus necesidades */
+    }
+
+    /* Cambia el color de la barra de desplazamiento de #speed a rojo */
+    #speed::-webkit-slider-runnable-track {
+      background: orange;
+    }
+
+    #speed::-moz-range-track {
+      background: orange;
+    }
+
+    #speed::-ms-track {
+      background: orange;
+    }
+
+    /* Cambia el color de la barra de desplazamiento de #volume a azul */
+    #volume::-webkit-slider-runnable-track {
+      background: green;
+    }
+
+    #volume::-moz-range-track {
+      background: green;
+    }
+
+    #volume::-ms-track {
+      background: green;
+    }
+
+    #play {
+        width: 40px; /* Ajusta este valor según tus necesidades */
+        height: 40px; /* Ajusta este valor según tus necesidades */
+        border-radius: 50%;
+        background-color: #007bff;
+        margin-left: 5px; /* Ajusta este valor según tus necesidades */
+    }
+
+    #play .fa-solid {
+        color: white;
+    }
+
+    #play {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+</style>
+
+<style>
+    @keyframes mover {
+        0% { left: 0; }
+        50% { left: 50%; }
+        100% { left: 0; }
+    }
+
+    @keyframes moverRapido {
+        0% { left: 0; }
+        50% { left: 75%; }
+        100% { left: 0; }
+    }
+
+    @keyframes cambiarColor {
+        0% { background-color: #007bff; }
+        50% { background-color: #dc3545; }
+        100% { background-color: #007bff; }
+    }
+
+    @keyframes reboteGirar {
+        0%, 100% { transform: translateY(0) rotate(0deg); }
+        50% { transform: translateY(-50px) rotate(360deg); } /* Ajusta este valor según tus necesidades */
+    }
+
+    #play {
+        position: relative;
+        animation: mover 30s linear infinite, cambiarColor 5s linear infinite, reboteGirar 5s ease-in-out infinite;
+    }
+
+    #play:hover {
+        animation: moverRapido 45s linear infinite, cambiarColor 2s linear infinite, reboteGirar 2s ease-in-out infinite;
+    }
+</style>
+
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand animate__animated animate__bounce" th:href="@{/principal}">GeoJuego</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" th:href="@{/noticias}">Noticias</a>
+                </li>
+                <input type="range" id="speed" min="0.1" max="2" step="0.1" value="1">
+                <input type="range" id="volume" min="0" max="1" step="0.01" value="1">
+                <a id="play" class="animated-button"><i class="fa-solid fa-play"></i></a>
+            </ul>
+        </div>
+    </div>
 </nav>
 
 <!-- El ternario es para que cuando la película tenga id, se modifique y si no tiene, se añada -->
 <div class="card">
     <div class="card-body">
-        <h2 class="display-5 text-center">Gestión de Películas</h2>
+        <h2 class="display-5 text-center">Editor de Noticia</h2>
         <hr>
         <form th:action="${formPelicula.id != 0} ? @{/crud/modificar} : @{/crud/save}"
               method="post" enctype="multipart/form-data" th:object="${formPelicula}">
@@ -33,23 +220,23 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="sinopsis">Sinopsis</label>
-                            <textarea class="form-control" name="sinopsis" id="sinopsis" rows="3" th:field="*{sinopsis}"
-                                      required></textarea>
+                            <label for="descripcion">Descripcion de la Noticia</label>
+                                <textarea class="form-control" name="descripcion" id="descripcion" rows="3" th:field="*{descripcion}"
+                                          required></textarea>
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="fecha">Fecha</label>
-                            <input type="date" class="form-control" name="fecha" id="fecha" th:field="*{fechaEstreno}" th:format="'dd-MM-YYYY'">
+                            <label for="fecha">Fecha de Publicacion</label>
+                            <input type="date" class="form-control" name="fecha" id="fecha" th:field="*{fechaSubida}" th:format="'dd-MM-YYYY'"required>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="imagen">Imagen</label>
-                            <input type="file" class="form-control" id="imagen" name="file" accept="image/*">
+                            <input type="file" class="form-control" id="imagen" name="file" accept="image/*"required>
                             <img th:src="${formPelicula.imagen}">
 
                         </div>
@@ -58,9 +245,8 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="trailer">Trailer</label>
-                            <input type="url" class="form-control" name="trailer" id="trailer" th:field="*{trailer}"
-                                   required>
+                            <label for="videoURL">Video Relacionado</label>
+                            <input type="url" class="form-control" name="videoURL" id="videoURL" th:field="*{videoURL}">
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -81,6 +267,7 @@
                                 <option value="Rusia">Rusia</option>
                                 <option value="India">India</option>
                                 <option value="Region de Murcia">Murcia</option>
+
                             </select>
                         </div>
                     </div>
@@ -96,15 +283,16 @@
     </div>
 </div>
 
-<!-- Footer -->
-<footer class="footer mt-auto py-3 bg-light">
-    <div class="container text-center">
-        <span class="text-muted">El peliculón.</span>
-    </div>
-</footer>
+<script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/@geoman-io/leaflet-geoman-free@latest/dist/leaflet-geoman.css" />
+<script src="https://unpkg.com/@geoman-io/leaflet-geoman-free@latest/dist/leaflet-geoman.min.js"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-        crossorigin="anonymous"></script>
+
+
+<script src="https://kit.fontawesome.com/ae360af17e.js" crossorigin="anonymous"></script>
+<script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.12.0/cdn/components/animation/animation.js"></script>
+<script src="/js/AnimacionShoelace.js"></script>
+<script src="/js/audio.js"></script>
+
 </body>
 </html>

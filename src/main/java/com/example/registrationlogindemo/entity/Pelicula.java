@@ -23,24 +23,27 @@ public class Pelicula {
     private String titulo;
 
     @Column(columnDefinition = "TEXT")
-    private String sinopsis;
+    private String descripcion;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate fechaEstreno;
+    private LocalDate fechaSubida;
 
     private String nacionalidad;
 
     private String imagen;
 
-    private String trailer;
+    private String videoURL;
 
     @OneToMany(mappedBy = "pelicula", cascade = CascadeType.REMOVE)
     private List<Comentario> comentarios;
 
     @Override
     public String toString() {
-        return "Pelicula {id=" + id + ", titulo=" + titulo + "si" + sinopsis + ", fechaEstreno=" + fechaEstreno + ", nacionalidad=" + nacionalidad + ", imagen=" + imagen + ", trailer=" + trailer + /* other fields */"}";
+        return "Pelicula {id=" + id + ", titulo=" + titulo + "si" + descripcion + ", fechaSubida=" + fechaSubida + ", nacionalidad=" + nacionalidad + ", imagen=" + imagen + ", videoURL=" + videoURL + /* other fields */"}";
     }
 
+    public void setVideoURL(String videoURL) {
+        this.videoURL = videoURL;
+    }
 }
 

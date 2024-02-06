@@ -48,7 +48,7 @@ public class SpringSecurity {
                                 .requestMatchers("/crud").hasRole("USER")
                                 .requestMatchers("/form_add").hasRole("USER")
                                 //.requestMatchers("/pelicula/**").permitAll()
-                                .requestMatchers("/comentario/add/**").permitAll()
+                                //.requestMatchers("/comentario/add/**").permitAll()
                                 .requestMatchers("/crud/save").permitAll()
                                 .requestMatchers("/crud/update/**").permitAll()
                                 .requestMatchers("/crud/modificar").permitAll()

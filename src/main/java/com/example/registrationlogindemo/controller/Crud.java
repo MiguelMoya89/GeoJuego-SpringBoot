@@ -33,13 +33,20 @@ public class Crud {
 
     @PostMapping("/crud/save")
     public String guardarPelicula(@ModelAttribute("formPelicula") Pelicula nuevaPelicula,
-                                  @RequestParam("file") MultipartFile file) {
+                                  @RequestParam("file") MultipartFile file,
+                                  @RequestParam(value = "videoURL", required = false) String videoURL) {
 
         if (!file.isEmpty()) {
             String imagen = storageService.store(file, nuevaPelicula.getTitulo());
             System.out.println("La imagen a guardar es : " + imagen);
             nuevaPelicula.setImagen(MvcUriComponentsBuilder
                     .fromMethodName(FileUploadController.class, "serveFile", imagen).build().toUriString());
+        }
+
+        if (videoURL == null || videoURL.isEmpty()) {
+            nuevaPelicula.setVideoURL(null);
+        } else {
+            nuevaPelicula.setVideoURL(videoURL);
         }
 
         servicioPeliculas.save(nuevaPelicula);
