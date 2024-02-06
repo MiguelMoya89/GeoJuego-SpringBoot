@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Añadir película</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+<body>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand ms-lg-5" href="/principal">El peliculón</a>
+    <a class="nav-link ms-3 fs-5" href="/principal">Inicio</a>
+    <a class="nav-link ms-3 fs-5" href="/crud">Crud</a>
+</nav>
+
+<!-- El ternario es para que cuando la película tenga id, se modifique y si no tiene, se añada -->
+<div class="card">
+    <div class="card-body">
+        <h2 class="display-5 text-center">Gestión de Películas</h2>
+        <hr>
+        <form th:action="${formPelicula.id != 0} ? @{/crud/modificar} : @{/crud/save}"
+              method="post" enctype="multipart/form-data" th:object="${formPelicula}">
+            <div class="container">
+                <div class="row">
+                    <input type="hidden" class="form-control" th:field="*{id}">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="titulo">Título</label>
+                            <input type="text" class="form-control" name="titulo" id="titulo" th:field="*{titulo}"
+                                   required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="sinopsis">Sinopsis</label>
+                            <textarea class="form-control" name="sinopsis" id="sinopsis" rows="3" th:field="*{sinopsis}"
+                                      required></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="fecha">Fecha</label>
+                            <input type="date" class="form-control" name="fecha" id="fecha" th:field="*{fechaEstreno}" th:format="'dd-MM-YYYY'">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="imagen">Imagen</label>
+                            <input type="file" class="form-control" id="imagen" name="file" accept="image/*">
+                            <img th:src="${formPelicula.imagen}">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="trailer">Trailer</label>
+                            <input type="url" class="form-control" name="trailer" id="trailer" th:field="*{trailer}"
+                                   required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="nacionalidad">Nacionalidad</label>
+                            <select class="form-control" name="nacionalidad" id="nacionalidad"
+                                    th:field="*{nacionalidad}"
+                                    required>
+                                <option value="">Seleccione una nacionalidad</option>
+                                <option value="España">España</option>
+                                <option value="EE. UU.">Estados Unidos</option>
+                                <option value="Reino Unido">Reino Unido</option>
+                                <option value="Francia">Francia</option>
+                                <option value="Italia">Italia</option>
+                                <option value="Japón">Japón</option>
+                                <option value="Alemania">Alemania</option>
+                                <option value="China">China</option>
+                                <option value="Rusia">Rusia</option>
+                                <option value="India">India</option>
+                                <option value="Region de Murcia">Murcia</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-12">
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                        <a href="javascript:history.back()" class="btn btn-secondary">Volver atrás</a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="footer mt-auto py-3 bg-light">
+    <div class="container text-center">
+        <span class="text-muted">El peliculón.</span>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+</body>
+</html>

@@ -6,15 +6,13 @@ import com.example.registrationlogindemo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
+
 import java.time.LocalDate;
 
 
 @CrossOrigin(origins = "*")
-@Controller
+@RestController
 public class PoliController {
     @Autowired
     UserService userService;
@@ -23,6 +21,7 @@ public class PoliController {
 
     @PostMapping("/guardarPoly")
     public String guardarPoly(@RequestBody String jsonPoli, Authentication authentication){
+        System.out.println("lLEGA A GUARDAR POLY");
         PoliJson poliJson = new PoliJson();
         poliJson.setUser(userService.findByEmail(authentication.getName()));
         poliJson.setFecha(LocalDate.now());
