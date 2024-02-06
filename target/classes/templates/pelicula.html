@@ -1,94 +1,250 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org" class="h-100">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Pelicula</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <title>GeoJuego</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
 </head>
-<body class="d-flex flex-column h-100">
+<body>
 
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand ms-lg-5" href="/">El peliculón</a>
-    <a class="nav-link ms-3 fs-5" href="/">Inicio</a>
-    <a class="nav-link ms-3 fs-5" href="/crud">Crud</a>
-</nav>
+<style>
+    body, html, #map {
+        box-sizing: border-box;
+        margin: 0;
+        margin-top: 0;
+        padding: 0;
+        height: 100vh;
+        width: 100vw;
+        overflow-x: hidden; /* Esto es para evitar el desplazamiento horizontal si hay algún margen o relleno */
+        box-sizing: border-box; /* Esto es para que el ancho y alto incluyan el relleno y el borde */
+        background-image: url('/js/img/fondoPreguntas.jpeg');
+        background-repeat: no-repeat;
+        background-size: inherit;
+        background-repeat: revert;
+    }
+
+    @keyframes rainbow {
+        100% {color: white;}
+    }
+
+    .navbar-brand {
+        font-size: 20px;
+        font-weight: bold;
+        background: linear-gradient(white, white, white);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        transition: transform 0.3s ease-in-out; /* Agrega una transición suave al efecto de transformación */
+    }
+
+    h2.animate__animated.animate__bounce {
+        font-size: 40px;
+        font-weight: bold;
+        transition: transform 0.10s ease-in-out;
+        color: black;
+    }
+
+    h2.animate__animated.animate__bounce:hover {
+        animation: rainbow 30s linear infinite;
+        transform: translateY(-10px);
+    }
+
+    #correctAnswerCount {
+    color: black;
+    transition: transform 0.10s ease-in-out;
+    font-size: 40px;
+    font-weight: bold;
+    margin-top: 5px;
+    }
+
+    #correctAnswerCount:hover {
+    animation: rainbow 50s linear infinite;
+    transform: translateY(-10px);
+    }
+
+
+    .navbar-brand:hover {
+        animation: rainbow 30s linear infinite;
+        transform: translateY(-10px); /* Mueve el texto 10px hacia arriba */
+    }
+
+    #answerForm {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    h2 {
+        text-align: center;
+    }
+
+    .navbar {
+        background-color: #e3f2fd;
+    }
+
+    #volume {
+        transform: rotate(-90deg);
+        width: 40px; /* Ajusta este valor según tus necesidades */
+        margin-right: 2px; /* Ajusta este valor según tus necesidades */
+        margin-left: 2px; /* Ajusta este valor según tus necesidades */
+    }
+
+    #speed {
+        transform: rotate(-90deg);
+        width: 40px; /* Ajusta este valor según tus necesidades */
+        margin-right: 1px; /* Ajusta este valor según tus necesidades */
+        margin-left: 1px; /* Ajusta este valor según tus necesidades */
+    }
+
+    /* Cambia el color de la barra de desplazamiento de #speed a rojo */
+    #speed::-webkit-slider-runnable-track {
+      background: orange;
+    }
+
+    #speed::-moz-range-track {
+      background: orange;
+    }
+
+    #speed::-ms-track {
+      background: orange;
+    }
+
+    /* Cambia el color de la barra de desplazamiento de #volume a azul */
+    #volume::-webkit-slider-runnable-track {
+      background: green;
+    }
+
+    #volume::-moz-range-track {
+      background: green;
+    }
+
+    #volume::-ms-track {
+      background: green;
+    }
+
+    #play {
+        width: 40px; /* Ajusta este valor según tus necesidades */
+        height: 40px; /* Ajusta este valor según tus necesidades */
+        border-radius: 50%;
+        background-color: #007bff;
+        margin-left: 5px; /* Ajusta este valor según tus necesidades */
+    }
+
+    #play .fa-solid {
+        color: white;
+    }
+
+    #play {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+</style>
+
+<style>
+    @keyframes mover {
+        0% { left: 0; }
+        50% { left: 50%; }
+        100% { left: 0; }
+    }
+
+    @keyframes moverRapido {
+        0% { left: 0; }
+        50% { left: 75%; }
+        100% { left: 0; }
+    }
+
+    @keyframes cambiarColor {
+        0% { background-color: #007bff; }
+        50% { background-color: #dc3545; }
+        100% { background-color: #007bff; }
+    }
+
+    @keyframes reboteGirar {
+        0%, 100% { transform: translateY(0) rotate(0deg); }
+        50% { transform: translateY(-50px) rotate(360deg); } /* Ajusta este valor según tus necesidades */
+    }
+
+    #play {
+        position: relative;
+        animation: mover 30s linear infinite, cambiarColor 5s linear infinite, reboteGirar 5s ease-in-out infinite;
+    }
+
+    #play:hover {
+        animation: moverRapido 45s linear infinite, cambiarColor 2s linear infinite, reboteGirar 2s ease-in-out infinite;
+    }
+</style>
 
 <style>
     .img-size {
         height: 300px;
         object-fit: cover;
     }
+
+    .img-center {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
 </style>
 
-<!-- Blog entry -->
-<main class="flex-shrink-0">
-    <div class="container mt-4">
-        <h1 class="mb-4 display-3 text-center" th:text="${pelicula.titulo}"></h1>
-        <div class="d-flex justify-content-center">
-            <th:block th:utext="${p.trailer}"></th:block>
-        <h2 class="h4 text-center">Sinopsis</h2>
-        <hr>
-        <p class="lead mb-4 text-center" th:text="${pelicula.sinopsis}"></p>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand animate__animated animate__bounce" th:href="@{/principal}">GeoJuego</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" th:href="@{/noticias}">Noticias</a>
+                </li>
+                <input type="range" id="speed" min="0.1" max="2" step="0.1" value="1">
+                <input type="range" id="volume" min="0" max="1" step="0.01" value="1">
+                <a id="play" class="animated-button"><i class="fa-solid fa-play"></i></a>
+            </ul>
+        </div>
+    </div>
+</nav>
 
-        <h2 class="h4 text-center">Fecha de estreno</h2>
-        <hr>
-        <p class="lead mb-4 text-center" th:text="${pelicula.fechaEstreno}"></p>
+<div class="container" style="border: 3px solid black; background-color: white; padding: 20px;">
+    <div class="row">
+        <!-- Blog entry -->
+        <main class="flex-shrink-0">
+            <div class="container mt-4">
+                <h1 class="mb-4 display-3 text-center" th:text="${pelicula.titulo}"></h1>
+                <img class="img-size img-center" th:src="${pelicula.imagen}">
+                <h2 class="h4 text-center">Noticia</h2>
+                <hr>
+                <p class="lead mb-4 text-center" th:text="${pelicula.sinopsis}"></p>
 
-        <h2 class="h4 text-center">Nacionalidad</h2>
-        <hr>
-        <p class="lead mb-4 text-center" th:text="${pelicula.nacionalidad}"></p>
+                <h2 class="h4 text-center">Fecha de publicacion</h2>
+                <hr>
+                <p class="lead mb-4 text-center" th:text="${pelicula.fechaEstreno}">Publicacion</p>
 
-        <!-- Comments -->
-        <div class="card-deck">
-            <div class="col-12 mb-4">
-                <h2 class="display-5 text-center">Comentarios</h2>
+                <h2 class="h4 text-center">Lugar</h2>
+                <hr>
+                <p class="lead mb-4 text-center" th:text="${pelicula.nacionalidad}"></p>
                 <hr>
             </div>
-            <div th:each="comentario:${comentarios}" class="col-md-6 col-lg-4 mb-4">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h5 class="card-title" th:text="${comentario.titulo}"></h5>
-                        <h6 class="card-subtitle mb-2 text-muted" th:text="${comentario.fecha}"></h6>
-                        <p class="card-text" th:text="${comentario.contenido}"></p>
-                    </div>
-                </div>
-            </div>
-        </div>
+        </main>
 
-        <hr>
+<script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/@geoman-io/leaflet-geoman-free@latest/dist/leaflet-geoman.css" />
+<script src="https://unpkg.com/@geoman-io/leaflet-geoman-free@latest/dist/leaflet-geoman.min.js"></script>
 
-        <!-- Comment form -->
-        <h2 class="display-5 text-center">Escribe un comentario</h2>
-        <hr>
-        <form action="/comentario/add" th:object="${nuevoComentario}" method="post">
-            <input type="hidden" name="idPelicula" th:value="${pelicula.id}">
-            <div class="mb-3">
-                <label for="titulo" class="form-label">Título</label>
-                <input type="text" class="form-control" id="titulo" name="titulo" th:field="*{titulo}" placeholder="Escribe un título para el comentario..." required>
-            </div>
-            <div class="mb-3">
-                <label for="contenido" class="form-label">Contenido</label>
-                <textarea class="form-control" id="contenido" name="contenido" rows="3" th:field="*{contenido}"
-                          placeholder="Escribe aquí tu comentario..."
-                          required></textarea>
-                <button type="submit" class="btn btn-primary mb-3">Enviar</button>
-            </div>
-        </form>
-    </div>
-    </div>
-</main>
 
-<!-- Footer -->
-<footer class="footer mt-auto py-3 bg-light">
-    <div class="container text-center">
-        <span class="text-muted">El peliculón.</span>
-    </div>
-</footer>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-        crossorigin="anonymous"></script>
+<script src="https://kit.fontawesome.com/ae360af17e.js" crossorigin="anonymous"></script>
+<script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.12.0/cdn/components/animation/animation.js"></script>
+<script src="/js/AnimacionShoelace.js"></script>
+<script src="/js/audio.js"></script>
+
 </body>
 </html>
