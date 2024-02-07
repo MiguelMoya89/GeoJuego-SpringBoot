@@ -218,19 +218,19 @@
         <!-- Blog entry -->
         <main class="flex-shrink-0">
             <div class="container mt-4">
-                <h1 class="mb-4 display-3 text-center" th:text="${pelicula.titulo}"></h1>
-                <img class="img-size img-center" th:src="${pelicula.imagen}">
+                <h1 class="mb-4 display-3 text-center" th:text="${noticiero.titulo}"></h1>
+                <img class="img-size img-center" th:src="${noticiero.imagen}">
                 <h2 class="h4 text-center">Noticia</h2>
                 <hr>
-                <p class="lead mb-4 text-center" th:text="${pelicula.descripcion}"></p>
+                <p class="lead mb-4 text-center" th:text="${noticiero.descripcion}"></p>
 
                 <h2 class="h4 text-center">Fecha de publicacion</h2>
                 <hr>
-                <p class="lead mb-4 text-center" th:text="${pelicula.fechaSubida}">Publicacion</p>
+                <p class="lead mb-4 text-center" th:text="${noticiero.fechaSubida}">Publicacion</p>
 
                 <h2 class="h4 text-center">Lugar</h2>
                 <hr>
-                <p class="lead mb-4 text-center" th:text="${pelicula.nacionalidad}"></p>
+                <p class="lead mb-4 text-center" th:text="${noticiero.nacionalidad}"></p>
                 <hr>
             </div>
         </main>

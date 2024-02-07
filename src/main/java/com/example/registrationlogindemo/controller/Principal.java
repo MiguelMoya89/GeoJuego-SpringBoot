@@ -1,8 +1,8 @@
 package com.example.registrationlogindemo.controller;
 
-import com.example.registrationlogindemo.entity.Pelicula;
+import com.example.registrationlogindemo.entity.Noticiero;
 import com.example.registrationlogindemo.service.ServicioComentarios;
-import com.example.registrationlogindemo.service.ServicioPeliculas;
+import com.example.registrationlogindemo.service.ServicioNoticieros;
 import com.example.registrationlogindemo.storage.StorageProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -17,37 +17,37 @@ import java.util.List;
 public class Principal {
 
     @Autowired
-    ServicioPeliculas servicioPeliculas;
+    ServicioNoticieros servicioNoticieros;
     @Autowired
     ServicioComentarios servicioComentarios;
 
     @GetMapping("/noticias")
     public String noticias(Model model) {
-        List<Pelicula> peliculas = servicioPeliculas.findAll();
-        model.addAttribute("peliculas", peliculas);
+        List<Noticiero> noticieros = servicioNoticieros.findAll();
+        model.addAttribute("noticieros", noticieros);
         return "noticias";
     }
 
 
-    @GetMapping("/pelicula/{id}")
-    public String pelicula(@PathVariable long id, Model model) {
-        Pelicula p = servicioPeliculas.findById(id);
-        model.addAttribute("pelicula", p);
-        model.addAttribute("comentarios", servicioComentarios.findByPelicula(p));
+    @GetMapping("/noticiero/{id}")
+    public String noticiero(@PathVariable long id, Model model) {
+        Noticiero p = servicioNoticieros.findById(id);
+        model.addAttribute("noticiero", p);
+        model.addAttribute("comentarios", servicioComentarios.findByNoticiero(p));
         //model.addAttribute("nuevoComentario", new Comentario());
-        return "pelicula";
+        return "noticiero";
     }
 
     //@PostMapping("/comentario/add")
-    //public String guardarComentario(@ModelAttribute("nuevoComentario") Comentario comentario, @RequestParam long idPelicula) {
+    //public String guardarComentario(@ModelAttribute("nuevoComentario") Comentario comentario, @RequestParam long idNoticiero) {
     //    comentario.setFecha(LocalDate.now());
-    //    comentario.setPelicula(servicioPeliculas.findById(idPelicula));
+    //    comentario.setNoticiero(servicioNoticieros.findById(idNoticiero));
     //    servicioComentarios.save(comentario);
-    //    return "redirect:/pelicula/" + comentario.getPelicula().getId();
+    //    return "redirect:/noticiero/" + comentario.getNoticiero().getId();
     //}
 
 
-    // @GetMapping("/pelicula/{id}/comentario/{idComentario}/update")
+    // @GetMapping("/noticiero/{id}/comentario/{idComentario}/update")
     // public String mostrarComentario(@PathVariable long id, @PathVariable long idComentario, Model model) {
     //     Comentario c = servicioComentarios.findById(idComentario);
     //     model.addAttribute("comentario", c);

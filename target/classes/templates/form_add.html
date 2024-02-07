@@ -206,8 +206,8 @@
     <div class="card-body">
         <h2 class="display-5 text-center">Editor de Noticia</h2>
         <hr>
-        <form th:action="${formPelicula.id != 0} ? @{/crud/modificar} : @{/crud/save}"
-              method="post" enctype="multipart/form-data" th:object="${formPelicula}">
+        <form th:action="${formNoticiero.id != 0} ? @{/crud/modificar} : @{/crud/save}"
+              method="post" enctype="multipart/form-data" th:object="${formNoticiero}">
             <div class="container">
                 <div class="row">
                     <input type="hidden" class="form-control" th:field="*{id}">
@@ -237,7 +237,7 @@
                         <div class="form-group">
                             <label for="imagen">Imagen</label>
                             <input type="file" class="form-control" id="imagen" name="file" accept="image/*"required>
-                            <img th:src="${formPelicula.imagen}">
+                            <img th:src="${formNoticiero.imagen}">
 
                         </div>
                     </div>

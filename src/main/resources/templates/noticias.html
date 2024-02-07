@@ -202,15 +202,15 @@
 </nav>
 
 <div class="container" style="border: 3px solid black; background-color: white; padding: 20px;">    <div class="row">
-        <!--El nombre de peliculas es el que viene del controlador crud-->
-        <div class="col-md-4 mb-3" th:each="p:${peliculas}">
+        <!--El nombre de noticieros es el que viene del controlador crud-->
+        <div class="col-md-4 mb-3" th:each="p:${noticieros}">
             <div class="card h-100">
                 <div class="card-body d-flex flex-column">
                     <h5 class="card-title" th:text="${p.titulo}"></h5>
                     <img th:src="${p.imagen}" class="img-fluid img-size d-block mx-auto rounded mb-3" style="width: 100%; height: 250px;">
                     <p class="card-text" th:text="${p.nacionalidad}"></p>
                     <p class="card-text" th:text="${p.fechaSubida}"></p>
-                    <a th:href="@{/pelicula/{id}(id=${p.id})}" class="btn btn-primary mt-auto">Ver más</a>
+                    <a th:href="@{/noticiero/{id}(id=${p.id})}" class="btn btn-primary mt-auto">Ver más</a>
                 </div>
             </div>
         </div>

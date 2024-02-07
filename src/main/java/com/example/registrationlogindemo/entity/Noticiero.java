@@ -12,8 +12,8 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "peliculas")
-public class Pelicula {
+@Table(name = "noticieros")
+public class Noticiero {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,12 +34,12 @@ public class Pelicula {
 
     private String videoURL;
 
-    @OneToMany(mappedBy = "pelicula", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "noticiero", cascade = CascadeType.REMOVE)
     private List<Comentario> comentarios;
 
     @Override
     public String toString() {
-        return "Pelicula {id=" + id + ", titulo=" + titulo + "si" + descripcion + ", fechaSubida=" + fechaSubida + ", nacionalidad=" + nacionalidad + ", imagen=" + imagen + ", videoURL=" + videoURL + /* other fields */"}";
+        return "Noticiero {id=" + id + ", titulo=" + titulo + "si" + descripcion + ", fechaSubida=" + fechaSubida + ", nacionalidad=" + nacionalidad + ", imagen=" + imagen + ", videoURL=" + videoURL + /* other fields */"}";
     }
 
     public void setVideoURL(String videoURL) {

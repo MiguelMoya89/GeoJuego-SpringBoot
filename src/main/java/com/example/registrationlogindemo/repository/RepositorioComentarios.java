@@ -1,7 +1,7 @@
 package com.example.registrationlogindemo.repository;
 
 import com.example.registrationlogindemo.entity.Comentario;
-import com.example.registrationlogindemo.entity.Pelicula;
+import com.example.registrationlogindemo.entity.Noticiero;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.ArrayList;
@@ -11,11 +11,11 @@ public interface RepositorioComentarios extends JpaRepository<Comentario, Long> 
 
     public Comentario findById(long id);
 
-    public ArrayList<Comentario> findByPelicula(Pelicula pelicula);
+    public ArrayList<Comentario> findByNoticiero(Noticiero noticiero);
 
     public Comentario save(Comentario comentario);
 
-    public Comentario deleteByPelicula(Pelicula pelicula);
+    public Comentario deleteByNoticiero(Noticiero noticiero);
 
     public void delete(Comentario comentario);
 

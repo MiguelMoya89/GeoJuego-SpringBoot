@@ -31,7 +31,7 @@ public class Comentario {
     private LocalTime hora;
 
     @ManyToOne
-    private Pelicula pelicula;
+    private Noticiero noticiero;
 
     @Override
     public String toString() {

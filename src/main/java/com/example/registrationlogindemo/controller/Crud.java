@@ -1,7 +1,7 @@
 package com.example.registrationlogindemo.controller;
 
-import com.example.registrationlogindemo.entity.Pelicula;
-import com.example.registrationlogindemo.service.ServicioPeliculas;
+import com.example.registrationlogindemo.entity.Noticiero;
+import com.example.registrationlogindemo.service.ServicioNoticieros;
 import com.example.registrationlogindemo.storage.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,56 +13,56 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 @Controller
 public class Crud {
     @Autowired
-    ServicioPeliculas servicioPeliculas;
+    ServicioNoticieros servicioNoticieros;
 
     @Autowired
     StorageService storageService;
 
     @GetMapping("/crud")
-    public String listadoPeliculas(Model model) {
-        //El nombre de "peliculas" es el que voy a utilizar en la plantilla
-        model.addAttribute("peliculas", servicioPeliculas.findAll());
+    public String listadoNoticieros(Model model) {
+        //El nombre de "noticiero" es el que voy a utilizar en la plantilla
+        model.addAttribute("noticieros", servicioNoticieros.findAll());
         return "crud";
     }
 
     @GetMapping("/add")
-    public String addPelicula(Model model) {
-        model.addAttribute("formPelicula", new Pelicula());
+    public String addNoticiero(Model model) {
+        model.addAttribute("formNoticiero", new Noticiero());
         return "form_add";
     }
 
     @PostMapping("/crud/save")
-    public String guardarPelicula(@ModelAttribute("formPelicula") Pelicula nuevaPelicula,
+    public String guardarNoticiero(@ModelAttribute("formNoticiero") Noticiero nuevaNoticiero,
                                   @RequestParam("file") MultipartFile file,
                                   @RequestParam(value = "videoURL", required = false) String videoURL) {
 
         if (!file.isEmpty()) {
-            String imagen = storageService.store(file, nuevaPelicula.getTitulo());
+            String imagen = storageService.store(file, nuevaNoticiero.getTitulo());
             System.out.println("La imagen a guardar es : " + imagen);
-            nuevaPelicula.setImagen(MvcUriComponentsBuilder
+            nuevaNoticiero.setImagen(MvcUriComponentsBuilder
                     .fromMethodName(FileUploadController.class, "serveFile", imagen).build().toUriString());
         }
 
         if (videoURL == null || videoURL.isEmpty()) {
-            nuevaPelicula.setVideoURL(null);
+            nuevaNoticiero.setVideoURL(null);
         } else {
-            nuevaPelicula.setVideoURL(videoURL);
+            nuevaNoticiero.setVideoURL(videoURL);
         }
 
-        servicioPeliculas.save(nuevaPelicula);
+        servicioNoticieros.save(nuevaNoticiero);
         return "redirect:/add";
     }
 
     @GetMapping("/crud/update/{id}")
-    public String muestraPelicula(@PathVariable long id, Model model) {
-        Pelicula p = servicioPeliculas.findById(id);
-        model.addAttribute("formPelicula", p);
+    public String muestraNoticiero(@PathVariable long id, Model model) {
+        Noticiero p = servicioNoticieros.findById(id);
+        model.addAttribute("formNoticiero", p);
         return "form_add";
     }
 
 
     @PostMapping("/crud/modificar")
-    public String modificarPelicula(@ModelAttribute("formPelicula") Pelicula p,
+    public String modificarNoticiero(@ModelAttribute("formNoticiero") Noticiero p,
                                     @RequestParam("file") MultipartFile file) {
 
         if (!file.isEmpty()) {
@@ -72,14 +72,14 @@ public class Crud {
                     .fromMethodName(FileUploadController.class, "serveFile", imagen).build().toUriString());
         }
 
-        servicioPeliculas.save(p);
+        servicioNoticieros.save(p);
         return "redirect:/crud";
     }
 
     @GetMapping("/crud/delete/{id}")
-    public String borrarPelicula(@PathVariable("id") long id) {
+    public String borrarNoticiero(@PathVariable("id") long id) {
 
-        servicioPeliculas.deleteById(id);
+        servicioNoticieros.deleteById(id);
         return "redirect:/crud";
     }
 
