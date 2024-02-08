@@ -1,5 +1,5 @@
 Proyecto creado por Miguel Fernando Moya Mellado usando Spring Boot y Thymeleaf llamado GeoJuego.
-en proceso de desarrollo....
+En proceso de desarrollo para futuras mejoras....
 
 <img width="937" alt="Captura de pantalla 2024-02-08 233705" src="https://github.com/MiguelMoya89/GeoJuego-SpringBoot/assets/127111987/5236956b-fc97-4eed-8246-8dbe18ae0e0d">
 
